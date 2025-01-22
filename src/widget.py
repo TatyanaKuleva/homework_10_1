@@ -9,7 +9,7 @@ def mask_account_card(type_number: str) -> str:
         if part.isdigit():
             if len(part) != 16 and len(part) != 20:
                 raise ValueError(
-                    f"Вы ввели не верный номер карты. " f"Количество цифр в номере карты 16, " f"вы ввыели {len(part)}."
+                    f"Вы ввели не верный номер карты или счета. " f"Количество цифр в номере карты 16, в номере счета 20, " f"вы ввыели {len(part)}."
                 )
             elif len(part) == 16:
                  masks_number = f"{part[:4]} {part[4:6]}+{"*" * 2} {"*" * 4} {part[12:]}"
