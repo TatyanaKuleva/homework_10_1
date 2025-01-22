@@ -1,4 +1,4 @@
-
+from datetime import datetime
 
 def mask_account_card(type_number: str) -> str:
     """Запрашивает тип и номер карты пользователя или счета и возвращает его с маскированием части данных"""
@@ -20,3 +20,11 @@ def mask_account_card(type_number: str) -> str:
             result_masks.append(part)
 
     return " ".join(result_masks) + " " + masks_number
+
+
+def get_date(date_time_coordinate:str)->str:
+    first_version_data = date_time_coordinate[0:10]
+    second_version_data = first_version_data.split('-')
+    result_data = '.'.join(second_version_data[:: -1])
+    return result_data
+
