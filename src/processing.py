@@ -11,4 +11,3 @@ def sort_by_date(data_dict: list[dict], sort_sequence: bool = True) -> list[dict
     """сортирует список словарей по дате транзакции в соответствии с выбранным вариантом сортировки"""
     sorted_by_date_list = sorted(data_dict, key=lambda x: x["date"], reverse=sort_sequence)
     return sorted_by_date_list
-
