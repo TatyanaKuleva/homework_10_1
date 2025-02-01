@@ -172,3 +172,8 @@ cython_debug/
 
 # PyPI configuration file
 .pypirc
+
+CACHEDIR.TAG
+Scripts
+envs.toml
+pyvenv.cfg
