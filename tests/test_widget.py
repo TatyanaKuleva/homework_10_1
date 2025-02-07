@@ -30,3 +30,17 @@ def test_mask_account_card_len(get_data_mis):
 def test_get_date_right_result(get_str_date, result_str_date):
     assert get_date(get_str_date) == result_str_date
 
+@pytest.mark.parametrize('get_date_diff_format, result_require_format', [('2024-03-11T02:26:18.671407', '11.03.2024'),
+                                                                         ('2021/11/03T02:26:18.671407', '03.11.2021'),
+                                                                         ('11 Mar 2003T02:26:18.671407', '11.03.2003'),
+                                                                         ('2024.03.11T02:26:18.671407', '11.03.2024')])
+def test_get_date_diff_format(get_date_diff_format, result_require_format):
+    assert get_date(get_date_diff_format) == result_require_format
+
+@pytest.mark.parametrize('get_data_no_date', [('T02:26:18.671407'),
+                                              ('03T02:26:18.671407'),
+                                              ('.671407'),])
+def test_get_data_mis_date(get_data_no_date):
+    with pytest.raises(ValueError) as incomplete_data:
+        get_date(get_data_no_date)
+
