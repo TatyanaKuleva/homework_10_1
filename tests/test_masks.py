@@ -1,13 +1,6 @@
 import pytest
 from src.masks import get_mask_account, get_mask_card_number
 
-@pytest.fixture
-def standart_number_card():
-    return '7000792289606361'
-
-@pytest.fixture
-def result_mask_number_card():
-    return '7000 79** **** 6361'
 
 def test_get_mask_card_number_right_result(standart_number_card, result_mask_number_card):
     assert get_mask_card_number(standart_number_card) == result_mask_number_card
@@ -21,16 +14,6 @@ def test_get_mask_card_number_right_len(get_number_card):
 def test_get_mask_card_number_no_all_digit(get_number_card):
     with pytest.raises(ValueError) as no_digit_number:
         get_mask_card_number(get_number_card)
-
-
-@pytest.fixture
-def standart_number_account():
-    return '73654108430135874305'
-
-
-@pytest.fixture
-def result_mask_number_account():
-    return '**4305'
 
 
 def test_get_mask_card_account_right_result(standart_number_account, result_mask_number_account):
