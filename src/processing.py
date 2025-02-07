@@ -2,9 +2,14 @@ def filter_by_state(data_dict: list[dict], state: str = "EXECUTED") -> list[dict
     """фильтрует список словарей в соответствии с выбранным статусом"""
     new_data_list = []
     for item in data_dict:
-        if item["state"] == state:
-            new_data_list.append(item)
-    return new_data_list
+        if 'state' not in item.keys():
+            raise ValueError (
+                'Нет статуса для фильтрации'
+            )
+        else:
+            if item['state'] == state:
+                new_data_list.append(item)
+        return new_data_list
 
 
 def sort_by_date(data_dict: list[dict], sort_sequence: bool = True) -> list[dict]:
