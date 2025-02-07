@@ -37,7 +37,7 @@ def mask_account_card(type_number: str) -> str:
 
 def get_date(date_time_coordinate: str) -> str:
     """принимает на вход строку с датой и возвращает строку с датой в формате "ДД.ММ.ГГГГ"""
-    if len(date_time_coordinate) < 10:
+    if date_time_coordinate[0] == 'T' or 'T' not in date_time_coordinate:
         raise ValueError(
             'Нет полных данных о дате транзакции'
         )
@@ -46,31 +46,11 @@ def get_date(date_time_coordinate: str) -> str:
         dt = date_object.date()
         if dt >= date.today():
             raise ValueError(
-                f"Отсутствую корректные данные о дате транзакции "
+                f"Отсутствуют корректные данные о дате транзакции "
             )
         else:
             date_string = dt.strftime("%d.%m.%Y")
             return date_string
 
 
-    # dt_string = dt.strftime("%d.%m.%Y")
-
-    # dt = datetime.strptime(date_object, '%Y-%m-%d').date()
-    # date_string = date_time_coordinate[0:10]
-    # date_object = datetime.strptime(date_string, '%Y-%m-%d').date()
-    # dt_string = date_object.strftime("%d.%m.%Y")
-    # return dt_string
-
-    # first_version_data = date_time_coordinate[0:10]
-    # second_version_data = first_version_data.split("-")
-    # result_data = ".".join(second_version_data[::-1])
-    # return result_data
-
-if __name__ == "__main__":
-    # print(parse('2024-03-11T02:26:18.671407'))
-    # print(parse('2021/11/03T02:26:18.671407'))
-    # print(parse('11 Mar 2003T02:26:18.671407'))
-    print(parse('2024.03.11T02:26:18.671407'))
-    print(parse('T02:26:18.671407'))
-    print(get_date('2024.03.11T02:26:18.671407'))
 

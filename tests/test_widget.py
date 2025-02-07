@@ -38,7 +38,7 @@ def test_get_date_diff_format(get_date_diff_format, result_require_format):
     assert get_date(get_date_diff_format) == result_require_format
 
 @pytest.mark.parametrize('get_data_no_date', [('T02:26:18.671407'),
-                                              ('03T02:26:18.671407'),
+                                              ('02:26:18.671407'),
                                               ('.671407'),])
 def test_get_data_mis_date(get_data_no_date):
     with pytest.raises(ValueError) as incomplete_data:
