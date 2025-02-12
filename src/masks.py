@@ -10,9 +10,7 @@ def get_mask_card_number(card_number: str) -> Union[str, int]:
         )
 
     if not card_number.isdigit():
-        raise ValueError(
-            f"Вы ввели не верный номер карты. Номер должен содержать только цифры"
-        )
+        raise ValueError(f"Вы ввели не верный номер карты. Номер должен содержать только цифры")
     return f"{card_number[:4]} {card_number[4:6]}{mask_card_number * 2} {mask_card_number * 4} {card_number[12:]}"
 
 
@@ -26,7 +24,5 @@ def get_mask_account(account_number: str) -> Union[str, int]:
         )
 
     if not account_number.isdigit():
-        raise ValueError(
-            f"Вы ввели не верный номер счета. Номер должен содержать только цифры"
-        )
+        raise ValueError(f"Вы ввели не верный номер счета. Номер должен содержать только цифры")
     return "**" + account_number[-4:]
