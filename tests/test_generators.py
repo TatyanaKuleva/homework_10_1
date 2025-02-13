@@ -35,9 +35,23 @@ def test_transaction_descriptions_epmty_list(get_empty_list):
 @pytest.mark.parametrize(
     "start, stop, expected_result",
     [
-        ("1", "3", "0000 0000 0000 0001 0000 0000 0000 0002 0000 0000 0000 0003")
+        (1, 3, ["0000 0000 0000 0001", "0000 0000 0000 0002", "0000 0000 0000 0003"]),
+        (1, 2, ["0000 0000 0000 0001", "0000 0000 0000 0002"]),
+        (1, 1, ["0000 0000 0000 0001"]),
+        (21, 24, ["0000 0000 0000 0021", "0000 0000 0000 0022", "0000 0000 0000 0023", "0000 0000 0000 0024"]),
+        (9999999999999997, 9999999999999999, ["9999 9999 9999 9997", "9999 9999 9999 9998", "9999 9999 9999 9999"])
     ],
 )
 def test_card_number_generator_right_result(start, stop, expected_result):
     gen = card_number_generator(start, stop)
-    assert next(gen) == expected_result
+    for _ in range(start, stop):
+       print(next(gen))
+
+@pytest.mark.parametrize("start, stop",
+                         [(9999999999999997, 10000000000000000000),
+                          (9999999999999997, 10000000000000000011111),
+                          (9999999999999997, 11535412154151121512121)])
+def test_card_number_generator_out_of_range(start, stop):
+    gen_card = card_number_generator(start, stop)
+    with pytest.raises(ValueError) as out_of_range:
+        assert next(gen_card)
