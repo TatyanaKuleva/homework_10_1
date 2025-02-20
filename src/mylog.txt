@@ -1,0 +1,17 @@
+my_function started at 1739996822.065787 and finished at 1739996822.065789 with result 3
+my_function started at 1739996900.15291 and finished at 1739996900.152912 with result 3
+my_function started at 1739997016.5170207 and finished at 1739997016.5170248 with result 3
+my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2') {}
+my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2') {}
+my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2') {}
+my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2') {}
+my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2') {}
+my_function ok
+my_function ok
+my_function ok
+my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2') {}
+my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2') {}
+my_function ok
+my_function ok
+my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2') {}
+my_function ok
