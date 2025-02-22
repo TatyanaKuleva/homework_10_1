@@ -19,17 +19,35 @@ def test_my_function_success():
         return x + y
 
     result = test_func(1, 2)
-    assert result == 3
+    with open("mylog.txt", "r") as f:
+        all_lines = f.readlines()
+        message = all_lines[-1]
+    assert message == "test_func ok\n"
 
-    result = test_func(1, "2")
-    assert result == "Произошла ошибка"
+
+def test_my_function_error(capsys):
+    @log()
+    def func_fail(x, y):
+        return x + y
+
+    with pytest.raises(TypeError) as exc:
+        func_fail(1, "2")
+
+        captured = capsys.readouterr()
+        assert (
+            captured.out == "my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2') {}"
+        )
 
 
-# def test_my_function_error():
-#     @log()
-#     def test_func_fail(x, y):
-#         return x + y
-#
-#     result = test_func_fail(1)
-#     with pytest.raises(Exception, match="my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2')") as exc:
-#        test_func_fail(1,'2')
+def test_my_function_write_log():
+    @log()
+    def func_fail(x, y):
+        return x + y
+
+    with pytest.raises(TypeError) as exc:
+        func_fail(1, "2")
+
+        with open("mylog.txt", "r") as f:
+            all_lines = f.readlines()
+            message = all_lines[-1]
+        assert message == "my_function error unsupported operand type(s) for +: 'int' and 'str'. Input (1, '2') {}"

@@ -216,7 +216,7 @@ if __name__ == "__main__":
     # for _ in range(5):
     #     print(next(description))
 
-    @log(filename="mylog.txt")
+    @log()
     def my_function(x, y):
         return x + y
     print(my_function(1, '2'))
