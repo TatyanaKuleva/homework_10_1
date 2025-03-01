@@ -10,19 +10,28 @@ def get_data_transaction(path: str) -> list:
         return []
 
 def sum_one_transction(transactrion: dict) -> float:
-    if transactrion['operationAmount']['currency']['code'] == "USD" or 'EUR':
-        sum_trans = transactrion['operationAmount']['amount']
-        convertion_sum = convertion_currency(sum_trans, transactrion['operationAmount']['currency']['code'])
+    """функция принимает на вход транзакцию и возвращает сумму транзакции в рублях. Если транзакция была в USD или EUR,
+    происходит обращение к внешнему API для получения текущего курса валют и конвертации суммы операции в рубли"""
+    if transactrion['operationAmount']['currency']['code'] == "RUB":
+        amount_data = transactrion['operationAmount']['amount']
+        return amount_data
+    else:
+        currency_code = transactrion["operationAmount"]["currency"]["code"]
+        transactrion_amount = transactrion["operationAmount"]["amount"]
+        convertion_sum = round(convertion_currency(transactrion_amount, currency_code),2)
         return convertion_sum
-    sum_trans = transactrion['operationAmount']['amount']
-    return sum_trans
+
 
 
 
 if __name__== '__main__':
-    data_trans = get_data_transaction('../data/operations.json')
-    for data in data_trans:
-        print(sum_one_transction(data))
+    dict_data =[]
+    for index in range(3):
+        dict_data.append(get_data_transaction('../data/operations.json')[index])
+    for item in dict_data:
+        print(sum_one_transction(item))
+
+
 
 
 
