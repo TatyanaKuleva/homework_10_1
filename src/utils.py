@@ -2,6 +2,7 @@ import json
 from src.external_api import convertion_currency
 
 def get_data_transaction(path: str) -> list:
+    """функция принимает путь до JSON-файла и возвращает список словарей с данными о финансовых транзакция"""
     try:
         with open(path, 'r', encoding="utf-8") as data_file:
             data_transaction = json.load(data_file)
