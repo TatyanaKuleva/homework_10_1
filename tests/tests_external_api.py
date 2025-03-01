@@ -1,22 +1,24 @@
 from unittest.mock import patch, Mock
 import requests
-from mypy.typeanal import analyze_type_alias
-
 from src.external_api import convertion_currency
 
 
-# def get_github_user_info(username):
-#     response = requests.get(f'https://api.github.com/users/{username}')
-#     return response.json()
 
-# @patch('requests.get')
-# def test_get_convertion_currency(mock_get):
-#     mock_get.return_value.json.return_value = {'login': 'testuser', 'name': 'Test User'}
-#     assert get_github_user_info('testuser') == {'login': 'testuser', 'name': 'Test User'}
-#     mock_get.assert_called_once_with('https://api.github.com/users/testuser')
+def test_get_convertion_currency():
+    mock_response = Mock()
+    mock_response.status_code = 200
+    mock_response.json.return_value = {"result": 89.340238}
 
-@patch('requests.get')
-def test_get_convertion_currency(mock_get):
-    mock_get.return_value.json.return_value = {"result": "89.340238" }
-    assert convertion_currency("1.0", "USD") ==
+    with patch('requests.get', return_value=mock_response):
+        result = convertion_currency("1.0","USD")
+        assert result == 89.340238
+
+def test_convertion_currency_failed_request():
+    mock_response = Mock()
+    mock_response.status_code = 500
+    mock_response.return_value = False
+
+    with patch('requests.get', return_value=mock_response):
+        result = convertion_currency("1.0", "USD")
+        assert result == False
 
