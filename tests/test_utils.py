@@ -16,4 +16,29 @@ def test_sum_one_transction(mock_func):
     mock_func.return_value = 31957.58
     result = sum_one_transction({'operationAmount': {'amount': "31957.58", 'currency': {'code': "RUB"}}})
     assert result == 31957.58
+    mock_func.assert_not_called()
+
+@patch("builtins.open", create=True)
+def test_get_data_transaction(mock_open):
+    mock_file = mock_open.return_value.__enter__.return_value
+    mock_file.read.return_value = '[{"id": 441945886}]'
+    assert get_data_transaction("../data/operations.json") == [{"id": 441945886}]
+    mock_open.assert_called_once_with("../data/operations.json", 'r', encoding="utf-8")
+
+@patch("builtins.open", create=True)
+def test_get_data_transaction_failed(mock_open):
+    mock_file = mock_open.return_value.__enter__.return_value
+    mock_file.read.return_value = "None"
+    assert get_data_transaction("../data/operations.json") == []
+    mock_open.assert_called_once_with("../data/operations.json", 'r', encoding="utf-8")
+
+
+
+
+
+
+
+
+
+
 

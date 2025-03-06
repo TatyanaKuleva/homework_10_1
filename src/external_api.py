@@ -1,12 +1,18 @@
 import os
 import requests
 from dotenv import load_dotenv
+from cachetools import cached, TTLCache
+
+cache = TTLCache(maxsize=100, ttl=86400)
 
 
+load_dotenv(".env")
+API_KEY = os.getenv("API_KEY")
+
+@cached(cache)
 def convertion_currency(amount: str, currency: str):
     """функция конвертации валюты в рубли с помощью Exchange Rates Data API"""
-    load_dotenv(".env")
-    API_KEY = os.getenv("API_KEY")
+
     url = f"https://api.apilayer.com/exchangerates_data/convert?to=RUB&from={currency}&amount={amount}"
 
     headers = {"apikey": f"{API_KEY}"}
