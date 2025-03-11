@@ -169,3 +169,5 @@ def result_filtr_transaction():
 @pytest.fixture
 def get_empty_list():
     return ([])
+
+
