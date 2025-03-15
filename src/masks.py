@@ -3,7 +3,7 @@ import logging
 
 masks_logger = logging.getLogger("masks")
 masks_logger.setLevel(logging.DEBUG)
-file_handler = logging.FileHandler("../logs/masks.log", "w", encoding="UTF-8")
+file_handler = logging.FileHandler("logs/masks.log", "w", encoding="UTF-8")
 file_formatter = logging.Formatter("%(asctime)s -%(name)s - %(levelname)s:%(message)s")
 file_handler.setFormatter(file_formatter)
 masks_logger.addHandler(file_handler)
@@ -43,3 +43,6 @@ def get_mask_account(account_number: str) -> Union[str, int]:
         masks_logger.error(f"номер счета содержит не только цифры")
         raise ValueError(f"Вы ввели не верный номер счета. Номер должен содержать только цифры")
     return "**" + account_number[-4:]
+
+if __name__ == "__main__":
+    print(get_mask_card_number('1211254562145645'))
