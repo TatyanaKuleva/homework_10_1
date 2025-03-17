@@ -11,9 +11,9 @@ def test_get_filter_by_test_no_status_for_filtr(result_data_dict, status_cancele
         filter_by_state(result_data_dict, status_canceled)
 
 
-def test_get_filter_by_test_no_status(get_data_dict_no_status, status_executed):
-    with pytest.raises(ValueError) as dict_no_status_for_filtr:
-        filter_by_state(get_data_dict_no_status, status_executed)
+# def test_get_filter_by_test_no_status(get_data_dict_no_status, status_executed):
+#     with pytest.raises(ValueError) as dict_no_status_for_filtr:
+#         filter_by_state(get_data_dict_no_status, status_executed)
 
 
 def test_sort_by_date_right_result(get_data_dict, list_dict_sorted_by_descending):

@@ -3,6 +3,7 @@ import logging
 from src.external_api import convertion_currency
 
 
+
 utils_logger = logging.getLogger("utils")
 utils_logger.setLevel(logging.DEBUG)
 file_handler = logging.FileHandler("logs/utils.log", "w", encoding="UTF-8")
@@ -39,5 +40,15 @@ def sum_one_transction(transactrion: dict) -> float:
         return convertion_sum
 
 
-if __name__ == "__main__":
-    print(sum_one_transction({"operationAmount": {"amount": "31957.58", "currency": {"code": "RUB"}}}))
+def filtr_rub_transction(transaction: list[dict]) -> list[dict]:
+    """функция принимает на вход транзакцию и возвращает транзакции в рублях."""
+    filtr_transaction_list = []
+    for item in transaction:
+        if 'operationAmount' in item:
+            if item ['operationAmount']['currency']['code'] == 'RUB':
+                filtr_transaction_list.append(item)
+        elif 'currency_code' in item:
+            if item ['currency_code'] == 'RUB':
+                filtr_transaction_list.append(item)
+    return filtr_transaction_list
+

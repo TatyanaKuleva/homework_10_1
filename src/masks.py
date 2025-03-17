@@ -44,5 +44,3 @@ def get_mask_account(account_number: str) -> Union[str, int]:
         raise ValueError(f"Вы ввели не верный номер счета. Номер должен содержать только цифры")
     return "**" + account_number[-4:]
 
-if __name__ == "__main__":
-    print(get_mask_card_number('1211254562145645'))
