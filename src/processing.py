@@ -1,17 +1,16 @@
 import re
 from collections import Counter
 
+
 def filter_by_state(data_dict: list[dict], state: str = "EXECUTED") -> list[dict]:
     """фильтрует список словарей в соответствии с выбранным статусом"""
     new_data_list = []
     for item in data_dict:
-        if "state" in item.keys():
-            if item["state"] == state:
+        if 'state' in item.keys():
+            if item['state'] == state:
                 new_data_list.append(item)
-            if len(new_data_list) == 0:
-                raise ValueError("Нет данных для указанного типа статуса")
-        else:
-            raise ValueError("отсутствует статус для фильтрации")
+    if len(new_data_list) == 0:
+        raise ValueError("Нет данных для указанного типа статуса")
 
     return new_data_list
 
@@ -36,6 +35,8 @@ def filtr_by_data_in_string(data_dict: list[dict], search_string: str)->list[dic
     return result
 
 def filtr_by_category(data_dict: list[dict], category_list: list)->list[dict]:
+    """ принимаtn список словарей с данными о банковских операциях и список категорий операций, а возвращать словарь,
+     в котором ключи — это названия категорий, а значения — это количество операций в каждой категории"""
     fitr_transction_list = []
     result_dict = dict()
     for item in data_dict:

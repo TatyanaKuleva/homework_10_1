@@ -14,7 +14,5 @@ def read_excel_file(path):
     result_dict = df.to_dict(orient='records')
     return result_dict
 
-# if __name__ == '__main__':
-#     # print(read_csv_file('../transactions.csv'))
-#     print(read_excel_file('../transactions_excel.xlsx'))
+
 

@@ -1,92 +1,11 @@
-
+import pandas as pd
 from src.masks import get_mask_account, get_mask_card_number
 from src.widget import mask_account_card, get_date
-from src.processing import filter_by_state, sort_by_date, filtr_by_category
+from src.processing import filter_by_state, sort_by_date, filtr_by_category, filtr_by_data_in_string
 from src.generators import filter_by_currency, transaction_descriptions, card_number_generator
 from src.decorators import log
 from src.func_get_data_csv_excel import read_excel_file, read_csv_file
-from src.utils import get_data_transaction, sum_one_transction
-
-#
-# transactions = (
-#         [
-#             {
-#                 "id": 939719570,
-#                 "state": "EXECUTED",
-#                 "date": "2018-06-30T02:08:58.425572",
-#                 "operationAmount": {
-#                     "amount": "9824.07",
-#                     "currency": {
-#                         "name": "RUB",
-#                         "code": "RUB"
-#                     }
-#                 },
-#                 "description": "Перевод организации",
-#                 "from": "Счет 75106830613657916952",
-#                 "to": "Счет 11776614605963066702"
-#             },
-#             {
-#                 "id": 142264268,
-#                 "state": "EXECUTED",
-#                 "date": "2019-04-04T23:20:05.206878",
-#                 "operationAmount": {
-#                     "amount": "79114.93",
-#                     "currency": {
-#                         "name": "",
-#                         "code": "RUB"
-#                     }
-#                 },
-#                 "description": "Перевод со счета на счет",
-#                 "from": "Счет 19708645243227258542",
-#                 "to": "Счет 75651667383060284188"
-#             },
-#             {
-#                 "id": 873106923,
-#                 "state": "EXECUTED",
-#                 "date": "2019-03-23T01:09:46.296404",
-#                 "operationAmount": {
-#                     "amount": "43318.34",
-#                     "currency": {
-#                         "name": "руб.",
-#                         "code": "USD"
-#                     }
-#                 },
-#                 "description": "Перевод со счета на счет",
-#                 "from": "Счет 44812258784861134719",
-#                 "to": "Счет 74489636417521191160"
-#             },
-#             {
-#                 "id": 895315941,
-#                 "state": "EXECUTED",
-#                 "date": "2018-08-19T04:27:37.904916",
-#                 "operationAmount": {
-#                     "amount": "56883.54",
-#                     "currency": {
-#                         "name": "RUB",
-#                         "code": "RUB"
-#                     }
-#                 },
-#                 "description": "Перевод с карты на карту",
-#                 "from": "Visa Classic 6831982476737658",
-#                 "to": "Visa Platinum 8990922113665229"
-#             },
-#             {
-#                 "id": 594226727,
-#                 "state": "CANCELED",
-#                 "date": "2018-09-12T21:27:25.241689",
-#                 "operationAmount": {
-#                     "amount": "67314.70",
-#                     "currency": {
-#                         "name": "руб.",
-#                         "code": "RUB"
-#                     }
-#                 },
-#                 "description": "Перевод организации",
-#                 "from": "Visa Platinum 1246377376343588",
-#                 "to": "Счет 14211924144426031657"
-#             }
-#         ]
-#     )
+from src.utils import get_data_transaction, sum_one_transction, filtr_rub_transction
 
 def main():
     """Главная функция для работя приложения"""
@@ -105,15 +24,76 @@ def main():
     else:
         print("Выберите необходимый пункт меню")
 
-    user_input_filtr = input('Введите статус, по которому необходимо выполнить фильтрацию. \n '
-                             'Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING ')
+
     correct_status = ['EXECUTED', 'CANCELED', 'PENDING']
 
-    if user_input_filtr.upper() in correct_status:
-        print(f'Операции отфильтрованы по статусу {user_input_filtr}')
+
+    while True:
+        user_input_status = input('Введите статус, по которому необходимо выполнить фильтрацию. \n '
+                                  'Доступные для фильтровки статусы: EXECUTED, CANCELED, PENDING ').upper()
+        if user_input_status in correct_status:
+            break
+        print(f'Статус операции {user_input_status} недоступен.')
+
+    filtr_transacton_status = filter_by_state(transaction, user_input_status)
+
+    user_input_sort_date = input('Отсортировать операции по дате? Да/Нет ').lower()
+
+    if user_input_sort_date =='да':
+        filtr_transacton_status_sort_date = sort_by_date(filtr_transacton_status)
+    elif user_input_sort_date =='нет':
+        filtr_transacton_status_sort_date = filtr_transacton_status
+
+    user_input_sort_date_order = input('Отсортировать по возрастанию или по убыванию? ').lower()
+    if user_input_sort_date_order =='по возрастанию':
+        filtr_transacton_status_sort_date_order =sort_by_date(filtr_transacton_status_sort_date, False)
+    elif user_input_sort_date_order =='по убыванию':
+        filtr_transacton_status_sort_date_order = sort_by_date(filtr_transacton_status_sort_date)
+
+    user_input_filtr_rub = input('Выводить только рублевые тразакции? Да/Нет? ').lower()
+    if user_input_filtr_rub == 'да':
+        filtr_transacton_status_rub = filtr_rub_transction(filtr_transacton_status_sort_date_order)
+    elif user_input_filtr_rub == 'нет':
+        filtr_transacton_status_rub = filtr_transacton_status_sort_date_order
+
+    user_input_filtr_word = input('Отфильтровать список транзакций по определенному слову в описании? Да/Нет ').lower()
+    if user_input_filtr_word == 'да':
+        user_input_word_for_filtr = input('Введите слово для фильтрации ')
+        filtr_transacton_status_word = filtr_by_data_in_string(filtr_transacton_status_rub, user_input_word_for_filtr)
+    elif user_input_filtr_word == 'нет':
+        filtr_transacton_status_word = filtr_transacton_status_rub
+
+    if len(filtr_transacton_status_word)>1:
+        print('Распечатываю итоговый список транзакций...')
+        print(f'Всего банковских операций в выборке: {len(filtr_transacton_status_word)}')
+        for item in filtr_transacton_status_word:
+            if 'operationAmount' in item:
+                if item['description'] == 'Открытие вклада':
+                    print(f'{get_date(item['date'])} {item['description']}')
+                    print(f'{mask_account_card(item['to'])}')
+                    print(f'Сумма {(item['operationAmount']['amount'])}.{(item['operationAmount']['currency']['name'])}')
+                else:
+                    print(f'{get_date(item['date'])} {item['description']}')
+                    print(f'{mask_account_card(item['from'])} -> {mask_account_card(item['to'])}')
+                    print(f'Сумма {(item['operationAmount']['amount'])}.{(item['operationAmount']['currency']['name'])}')
+            else:
+                if item['description'] == 'Открытие вклада':
+                    print(f'{get_date(item['date'])} {item['description']}')
+                    print(f'{mask_account_card(item['to'])}')
+                    print(f'Сумма {(item['amount'])}.{(item['currency_code'])}')
+                else:
+                    print(f'{get_date(item['date'])} {item['description']}')
+                    print(f'{mask_account_card(item['from'])} -> {mask_account_card(item['to'])}')
+                    print(f'Сумма {(item['amount'])}.{(item['currency_code'])}')
     else:
+        print('Программа: Не найдено ни одной транзакции, подходящей под ваши условия фильтрации')
 
 
+
+
+
+
+    # return filtr_transacton_status_word
 
 
 
@@ -121,4 +101,5 @@ def main():
 
 if __name__ == "__main__":
     print(main())
+
 
